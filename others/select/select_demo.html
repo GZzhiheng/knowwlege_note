@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Select demo</title>
+	<script src="./js/jquery.min.js"></script>
+</head>
+<body>
+<table cellspacing="1" cellpadding="3" width='100%'>
+	<tr>
+		<td width="19%" height='77' align='left'>
+			<select name='brandlist' id='brand_sel' multiple='true'>
+				<option value='1'>爱慕</option>
+				<option value='2'>GAINREEL</option>
+				<option value='3'>猫人</option>
+				<option value='4'>七匹狼</option>
+				<option value='5'>百丽</option>
+				<option value="6">Tata</option>
+			</select>
+		</td>
+		<td width="13%" align="center" > 
+  			<input type="button" class="button" value=" -> " onclick="javascript:rightMove();"/><br/>
+  			<input type="button" class="button" value=" <- " onclick="javascript:leftMove();"/><br/>
+  			<input type="button" class="button" value=" 重置 " onclick="javascript:clean();"/>
+		</td>
+		<td width="68%" height="77" align="left" >
+		    <select id="choose_sel" multiple="true"> 
+		           <option value="5">七匹狼</option> 
+		    </select>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+	function rightMove(){
+		var brand_sel = document.getElementById('brand_sel');
+		var choose_sel = document.getElementById('choose_sel');
+
+		var brand_options = brand_sel.options;
+		var s = choose_sel.options.length;
+
+		for(var i=0;i<brand_options.length;i++){
+			var is_selected = brand_options[i].selected;
+			if(is_selected){
+				var option = new Option(brand_options[i].text,brand_options[i].value);
+				if(!contains(choose_sel,option)){
+					choose_sel.options[s++] = new Option(brand_options[i].text  ,brand_options[i].value)
+				}
+			}
+		}
+	}
+
+	function leftMove(){
+		var select_right = document.getElementById('choose_sel');
+		var right_opt = select_right.options;
+
+		for(var i=0;i<right_opt.length;i++){
+			var is_selected = right_opt[i].selected;
+			if(is_selected){
+				right_opt.remove(i);
+			}
+		}
+	}
+
+	function clean(){
+		$('#choose_sel>option').each(function(){
+			$(this).remove();
+		});
+	}
+
+	function selectChose(){
+		$('#choose_sel>option').attr('selected','true');
+	}
+
+	function contains(obj_sel,option){
+		var options = obj_sel.options;
+		for (var i=0;i<options.length;i++){
+			if(options[i].value == option.value){
+				return true;
+			}
+		}
+
+		return false;
+	}
+</script>
+
+</body>
+</html>

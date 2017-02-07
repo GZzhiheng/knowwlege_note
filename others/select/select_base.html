@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Select base</title>
+	<script src="./js/jquery.min.js"></script>
+</head>
+<body>
+
+ <select id="mySelect">
+ 	<option value="1">one</option>
+ 	<option value="2">two</option>
+ 	<option value="3">three</option>
+ 	<option value="4">four</option>
+ 	<option value="5">five</option>
+ </select>
+
+<script type="text/javascript">
+	$('#mySelect').val();
+	$('#mySelect option:selected').text();//获取text值
+
+	var obj = document.getElementById('mySelect');
+	//添加option
+	obj.add(new Option('4','4'));
+	//删除所有option
+	obj.potions.length = 0;
+	//删除选中的option
+	var index = obj.selectedIndex;
+	obj.options.remove(index);
+	//修改选中的option
+	var index = obj.selectedIndex;
+	obj.options[index] = new Option('three',3);//修改对应的值
+	obj.options[index].selected = true; //保持选中状态
+   
+    //删除select
+	var obj = document.getElementById('mySelect');
+	obj.parentNode.removeChild(obj);//移除当前对象
+
+	//select响应事件
+	$('#mySelect').change(function(){
+		//Your code!
+	})
+</script>
+
+</body>
+</html>
