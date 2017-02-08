@@ -1,0 +1,18 @@
+JSON --> JavaScript Object Notation (JavaScript对象表示法)；
+
+javascript 用 eval()函数将JSON转化为原生对象;
+
+eval() 函数使用的是 JavaScript 编译器，可解析 JSON 文本，然后生成 JavaScript 对象。必须把文本包围在括号中，这样才能避免语法错误：
+
+例：
+var txt = '{ "sites" : [' +
+'{ "name":"菜鸟教程" , "url":"www.runoob.com" },' +
+'{ "name":"google" , "url":"www.google.com" },' +
+'{ "name":"微博" , "url":"www.weibo.com" } ]}';
+ 
+var obj = eval ("(" + txt + ")");
+
+
+字符串转json: JSON.parse(jsonStr);
+
+json对象转字符串: JSON.stringify(jsonObj);
