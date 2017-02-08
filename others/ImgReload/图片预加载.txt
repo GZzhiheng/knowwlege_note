@@ -1,0 +1,29 @@
+一、通过css实现图片预加载
+	.img1{
+		background:url('./img1.jpg') no-repeat -99999 -99999;
+	}
+	.img2{
+		background:url('./img2.jpg') no-repeat -99999 -99999;
+	}
+	.img3{
+		background:url('./img3.jpg') no-repeat -99999 -99999;
+	}
+
+二、通过javaScript实现图片预加载
+
+	<script type='text/javascript'>
+		var images = new Array();
+
+		function preload(){
+			for(var i = 0; i < preload.arguments.length;i++){
+				images[i] = new Image();
+				images[i].src = preload.arguments[i]
+			}
+		}
+
+		preload(
+			'img1.jpg',
+			'img2.jpg',
+			'img3.jpg'
+		)
+	</script>
