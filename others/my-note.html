@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mynote</title>
+</head>
+<body>
+<h1>*input</h1>
+	<input onkeyup='value=value.replace(/[^\d]/g,"")' onfocus='if(value == "请输入出价"){value = ""}' onblur="if(value == ''){value='请输入出价'}" type="text" value="请输入出价">
+	</br>
+	</br>
+<h1>*判断IE</h1>
+	<p>只有IE支持document.all对象</p>
+	<div>
+		function doBack(){
+			if(document.all){
+				console.log(IE);
+			} else {
+				console.log(not IE);
+			}
+		}
+	</div>
+	</br>
+	</br>
+<h1>*For in</h1>
+	<div>
+		a = {"a" : "Athens" , "b" : "Belgrade", "c" : "Cairo"}  
+  		</br>
+		for (key in a) {  
+		    s += a[key];  
+		}  
+	</div>
+	</br>
+	</br>
+<h1>*return 回函数本身</h1>
+	<div>
+		var add =function(a){</br>
+			return function(b){</br>
+				return a+b;</br>
+			}</br>
+		}</br>
+		add(a)(b);
+	</div>
+	</br>
+	</br>
+<h1>*判断js数组包是否包含某个元素</h1>
+	<div>
+		Array.prototype.inArray = function(id)    
+			{    
+			    for(i=0;i<\this.length;i++) {    
+			        if(this[i] == id)    
+			            return true;    
+			    }
+			    return false;    
+			}
+			  
+			var arr=["a","b"];    
+			alert(arr.inArray("a"));
+	</div>
+</body>
+</html>
