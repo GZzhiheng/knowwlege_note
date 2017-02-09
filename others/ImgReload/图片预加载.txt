@@ -11,6 +11,7 @@
 
 二、通过javaScript实现图片预加载
 
+	1、
 	<script type='text/javascript'>
 		var images = new Array();
 
@@ -26,4 +27,34 @@
 			'img2.jpg',
 			'img3.jpg'
 		)
+	</script>
+
+	2、
+	<script type='text/javascript'>
+		var images = new Array();
+
+		var eachimg = document.getElementsByTagName('img');
+
+		function preload(imgs){
+			var length = imgs.length
+			for(var i = 0; i < length;i++){
+				images[i] = new Image();
+				images[i].src = length[i].src;
+			}
+		}
+
+		function preloadImg(){
+			var oldonload = window.onload;
+
+			if(typeof window.onload != 'function'){
+				window.onload = preload(eachimg);
+			} else {
+				window.onload = function(){
+					if(oldonload){
+						oldonload();
+					}
+					preload(eachimg)
+				}
+			}
+		}
 	</script>
