@@ -21,6 +21,7 @@ var imgReady = (function () {
             img = new Image();
         
         img.src = url;
+        console.log(load);
 
         // 如果图片被缓存，则直接返回缓存数据
         if (img.complete) {

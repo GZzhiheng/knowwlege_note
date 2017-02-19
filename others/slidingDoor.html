@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0;
+		transition:all 0.5s;
+		/*过渡!!!*/
+	}
+	#box {
+		height: 477px;
+		margin: 0 auto;
+		border-right: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+		overflow: hidden;
+		position: relative;
+	}
+	#box img {
+		position: absolute;
+		display: block;
+		left: 0;
+		border-left: 1px solid #ccc;
+	}
+	</style>
+	<script type="text/javascript">
+		window.onload=function(){
+			var box=document.getElementById('box');//获取容器
+			var imgs=document.getElementsByTagName('img');//获取图片集合
+			var imgWidth=imgs[0].offsetWidth;//一张图片的宽度
+			// console.log(imgWidth);//476
+			var outsideWidth=160;//设置图片露出宽度
+			var boxWidth=imgWidth+(imgs.length-1)*outsideWidth;//设置容器总宽度
+			box.style.width=boxWidth+'px';
+			console.log(box.style.width);//476+(4-1)*160=956
+
+			//设置除了第一道门以外 剩余其余门的位置(第二个门开始)
+			function setimg(){
+				for(var i=1,len=imgs.length;i<len;i++){
+				imgs[i].style.left=imgWidth+(i-1)*outsideWidth+'px';
+				}
+			}
+			setimg();//调用一次复位
+			
+
+			//设计每一道门打开时应该移动的距离
+			var moveleft=imgWidth-outsideWidth;
+
+			//为每一道门绑定事件 遍历
+			//包括第一道门
+			for(var i=0,len=imgs.length;i<len;i++){
+				//通过立即调用的函数表达式 为了获得不同的i值
+				(function(i){
+					imgs[i].onmouseover=function(){
+						//先将每道门复位
+						setimg();
+						//打开门 从第二道门开始
+						for(var j=1;j<=i;j++){
+							imgs[j].style.left=parseInt(imgs[j].style.left)-moveleft+'px';
+						}
+					}
+				})(i);
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id='box'>
+		<img src="door1.png" alt="1080P神器" title="1080P神器" />
+		<img src="door2.png" alt="5.5寸四核" title="5.5寸四核" />
+		<img src="door3.png" alt="四核5寸" title="四核5寸" />
+		<img src="door4.png" alt="5.7寸机皇" title="5.7寸机皇" />
+	</div>
+</body>
+</html>
