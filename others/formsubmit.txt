@@ -1,0 +1,21 @@
+回车切换为下一行
+
+$(function(){
+	$('form[name="articleForm"] input:text').keypress(function(e){
+
+		if(e.widch == 13){
+			var inputs = $('form[name="articleForm"]').find(':text');
+			var idx = inputs.index(this);
+			if(idx == inputs.length - 1){
+				if(confirm('最后选项已填写，是否提交？')){
+					$("form[name='articleForm']").submit();
+				} else {
+					inputs[idx + 1].focus();
+					inputs[idx + 1].select();
+				}
+			}
+
+			return false;
+		}
+	});
+});
