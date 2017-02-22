@@ -14,7 +14,6 @@ $(function(){
 					inputs[idx + 1].select();
 				}
 			}
-
 			return false;
 		}
 	});

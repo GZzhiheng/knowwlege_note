@@ -1,0 +1,358 @@
+获取当月第一天是周几：
+
+var dCalDate = new Date(iYear, iMonth - 1, 1);    
+var iDayOfFirst = dCalDate.getDay();   
+
+ 获取当月共几天：
+
+ getDaysInmonth : function(iMonth, iYear){  
+   var dPrevDate = new Date(iYear, iMonth, 0);  
+   return dPrevDate.getDate();  
+  }  
+
+ //此处构造的日期为下个月的第0天，天数索引从1开始，第0天即代表上个月的最后一天
+var curMonthDays = new Date(d.getFullYear(), (d.getMonth()+1), 0).getDate();
+alert("本月共有 "+ curMonthDays +" 天");
+
+http://uule.iteye.com/blog/2278168
+
+
+
+
+=========以下为参考内容==============
+
+2、构造当月日历二维数组
+Js代码  收藏代码
+bulidCal : function(iYear, iMonth) {  
+   var aMonth = new Array();  
+   aMonth[0] = new Array(7);  
+   aMonth[1] = new Array(7);  
+   aMonth[2] = new Array(7);  
+   aMonth[3] = new Array(7);  
+   aMonth[4] = new Array(7);  
+   aMonth[5] = new Array(7);  
+   aMonth[6] = new Array(7);  
+   var dCalDate = new Date(iYear, iMonth - 1, 1);  
+   var iDayOfFirst = dCalDate.getDay();  
+   var iDaysInMonth = calUtil.getDaysInmonth(iMonth, iYear);  
+   var iVarDate = 1;  
+   var d, w;  
+   aMonth[0][0] = "日";  
+   aMonth[0][1] = "一";  
+   aMonth[0][2] = "二";  
+   aMonth[0][3] = "三";  
+   aMonth[0][4] = "四";  
+   aMonth[0][5] = "五";  
+   aMonth[0][6] = "六";  
+   for (d = iDayOfFirst; d < 7; d++) {  
+    aMonth[1][d] = iVarDate;  
+    iVarDate++;  
+   }  
+   for (w = 2; w < 7; w++) {  
+    for (d = 0; d < 7; d++) {  
+     if (iVarDate <= iDaysInMonth) {  
+      aMonth[w][d] = iVarDate;  
+      iVarDate++;  
+     }  
+    }  
+   }  
+   return aMonth;  
+  }  
+ 获取当月第一天是周几：
+Js代码  收藏代码
+var dCalDate = new Date(iYear, iMonth - 1, 1);    
+var iDayOfFirst = dCalDate.getDay();    
+ 获取当月共几天：
+Js代码  收藏代码
+getDaysInmonth : function(iMonth, iYear){  
+   var dPrevDate = new Date(iYear, iMonth, 0);  
+   return dPrevDate.getDate();  
+  }  
+
+
+3、构造当月日历HTML
+Js代码  收藏代码
+drawCal : function(iYear, iMonth ,signList) {  
+   var myMonth = calUtil.bulidCal(iYear, iMonth);  
+   var htmls = new Array();  
+   htmls.push("<div class='sign_main' id='sign_layer'>");  
+   htmls.push("<div class='sign_succ_calendar_title'>");  
+   htmls.push("<div class='calendar_month_next'>下月</div>");  
+   htmls.push("<div class='calendar_month_prev'>上月</div>");  
+   htmls.push("<div class='calendar_month_span'></div>");  
+   htmls.push("</div>");  
+   htmls.push("<div class='sign' id='sign_cal'>");  
+   htmls.push("<table>");  
+   htmls.push("<tr>");  
+   htmls.push("<th>" + myMonth[0][0] + "</th>");  
+   htmls.push("<th>" + myMonth[0][1] + "</th>");  
+   htmls.push("<th>" + myMonth[0][2] + "</th>");  
+   htmls.push("<th>" + myMonth[0][3] + "</th>");  
+   htmls.push("<th>" + myMonth[0][4] + "</th>");  
+   htmls.push("<th>" + myMonth[0][5] + "</th>");  
+   htmls.push("<th>" + myMonth[0][6] + "</th>");  
+   htmls.push("</tr>");  
+   var d, w;  
+   for (w = 1; w < 6; w++) {  
+    htmls.push("<tr>");  
+    for (d = 0; d < 7; d++) {  
+     var ifHasSigned = calUtil.ifHasSigned(signList,myMonth[w][d]);  
+     console.log(ifHasSigned);  
+     if(ifHasSigned){  
+      htmls.push("<td class='on'>" + (!isNaN(myMonth[w][d]) ? myMonth[w][d] : " ") + "</td>");  
+     } else {  
+      htmls.push("<td>" + (!isNaN(myMonth[w][d]) ? myMonth[w][d] : " ") + "</td>");  
+     }  
+    }  
+    htmls.push("</tr>");  
+   }  
+   htmls.push("</table>");  
+   htmls.push("</div>");  
+   htmls.push("</div>");  
+   return htmls.join('');  
+  }
+
+
+4、控件的事件处理机制
+指定一个默认的eventName:"load"，不同的事件定义不同的eventName
+默认时：
+Js代码  收藏代码
+eventName:"load",  
+  //初始化日历  
+  init:function(signList){  
+    calUtil.setMonthAndDay();  
+    calUtil.draw(signList);  
+    calUtil.bindEnvent();  
+  },  
+ 
+Java代码  收藏代码
+setMonthAndDay:function(){  
+    switch(calUtil.eventName)  
+    {  
+      case "load":  
+        var current = new Date();  
+        calUtil.showYear=current.getFullYear();  
+        calUtil.showMonth=current.getMonth() + 1;  
+        break;  
+      case "prev":  
+        var nowMonth=$(".calendar_month_span").html().split("年")[1].split("月")[0];  
+        calUtil.showMonth=parseInt(nowMonth)-1;  
+        if(calUtil.showMonth==0)  
+        {  
+            calUtil.showMonth=12;  
+            calUtil.showYear-=1;  
+        }  
+        break;  
+      case "next":  
+        var nowMonth=$(".calendar_month_span").html().split("年")[1].split("月")[0];  
+        calUtil.showMonth=parseInt(nowMonth)+1;  
+        if(calUtil.showMonth==13)  
+        {  
+            calUtil.showMonth=1;  
+            calUtil.showYear+=1;  
+        }  
+        break;  
+    }  
+  },  
+ 不同的事件触发：
+Js代码  收藏代码
+bindEnvent:function(){  
+    //绑定上个月事件  
+    $(".calendar_month_prev").click(function(){  
+      //ajax获取日历json数据  
+      var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];  
+      calUtil.eventName="prev";  
+      calUtil.init(signList);  
+    });  
+    //绑定下个月事件  
+    $(".calendar_month_next").click(function(){  
+      //ajax获取日历json数据  
+      var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];  
+      calUtil.eventName="next";  
+      calUtil.init(signList);  
+    });  
+  }  
+
+页面引用：
+Html代码  收藏代码
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<title>签到效果实现</title>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>  
+<link rel="stylesheet" type="text/css" href="css/sign.css"/>  
+<script type="text/javascript" src="js/calendar.js"></script>  
+<script type="text/javascript">  
+$(function(){  
+  //ajax获取日历json数据  
+  var signList=[{"signDay":"09"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];  
+   calUtil.init(signList);  
+});  
+</script>  
+</head>  
+<body>  
+      
+<div style="width:300px;height:300px;" id="calendar">  
+</div>  
+</body>  
+</html>  
+ JS：
+Js代码  收藏代码
+var calUtil = {  
+  //当前日历显示的年份  
+  showYear:2015,  
+  //当前日历显示的月份  
+  showMonth:1,  
+  //当前日历显示的天数  
+  showDays:1,  
+  eventName:"load",  
+  //初始化日历  
+  init:function(signList){  
+    calUtil.setMonthAndDay();  
+    calUtil.draw(signList);  
+    calUtil.bindEnvent();  
+  },  
+  draw:function(signList){  
+    //绑定日历  
+    var str = calUtil.drawCal(calUtil.showYear,calUtil.showMonth,signList);  
+    $("#calendar").html(str);  
+    //绑定日历表头  
+    var calendarName=calUtil.showYear+"年"+calUtil.showMonth+"月";  
+    $(".calendar_month_span").html(calendarName);    
+  },  
+  //绑定事件  
+  bindEnvent:function(){  
+    //绑定上个月事件  
+    $(".calendar_month_prev").click(function(){  
+      //ajax获取日历json数据  
+      var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];  
+      calUtil.eventName="prev";  
+      calUtil.init(signList);  
+    });  
+    //绑定下个月事件  
+    $(".calendar_month_next").click(function(){  
+      //ajax获取日历json数据  
+      var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];  
+      calUtil.eventName="next";  
+      calUtil.init(signList);  
+    });  
+  },  
+  //获取当前选择的年月  
+  setMonthAndDay:function(){  
+    switch(calUtil.eventName)  
+    {  
+      case "load":  
+        var current = new Date();  
+        calUtil.showYear=current.getFullYear();  
+        calUtil.showMonth=current.getMonth() + 1;  
+        break;  
+      case "prev":  
+        var nowMonth=$(".calendar_month_span").html().split("年")[1].split("月")[0];  
+        calUtil.showMonth=parseInt(nowMonth)-1;  
+        if(calUtil.showMonth==0)  
+        {  
+            calUtil.showMonth=12;  
+            calUtil.showYear-=1;  
+        }  
+        break;  
+      case "next":  
+        var nowMonth=$(".calendar_month_span").html().split("年")[1].split("月")[0];  
+        calUtil.showMonth=parseInt(nowMonth)+1;  
+        if(calUtil.showMonth==13)  
+        {  
+            calUtil.showMonth=1;  
+            calUtil.showYear+=1;  
+        }  
+        break;  
+    }  
+  },  
+  getDaysInmonth : function(iMonth, iYear){  
+   var dPrevDate = new Date(iYear, iMonth, 0);  
+   return dPrevDate.getDate();  
+  },  
+  bulidCal : function(iYear, iMonth) {  
+   var aMonth = new Array();  
+   aMonth[0] = new Array(7);  
+   aMonth[1] = new Array(7);  
+   aMonth[2] = new Array(7);  
+   aMonth[3] = new Array(7);  
+   aMonth[4] = new Array(7);  
+   aMonth[5] = new Array(7);  
+   aMonth[6] = new Array(7);  
+   var dCalDate = new Date(iYear, iMonth - 1, 1);  
+   var iDayOfFirst = dCalDate.getDay();  
+   var iDaysInMonth = calUtil.getDaysInmonth(iMonth, iYear);  
+   var iVarDate = 1;  
+   var d, w;  
+   aMonth[0][0] = "日";  
+   aMonth[0][1] = "一";  
+   aMonth[0][2] = "二";  
+   aMonth[0][3] = "三";  
+   aMonth[0][4] = "四";  
+   aMonth[0][5] = "五";  
+   aMonth[0][6] = "六";  
+   for (d = iDayOfFirst; d < 7; d++) {  
+    aMonth[1][d] = iVarDate;  
+    iVarDate++;  
+   }  
+   for (w = 2; w < 7; w++) {  
+    for (d = 0; d < 7; d++) {  
+     if (iVarDate <= iDaysInMonth) {  
+      aMonth[w][d] = iVarDate;  
+      iVarDate++;  
+     }  
+    }  
+   }  
+   return aMonth;  
+  },  
+  ifHasSigned : function(signList,day){  
+   var signed = false;  
+   $.each(signList,function(index,item){  
+    if(item.signDay == day) {  
+     signed = true;  
+     return false;  
+    }  
+   });  
+   return signed ;  
+  },  
+  drawCal : function(iYear, iMonth ,signList) {  
+   var myMonth = calUtil.bulidCal(iYear, iMonth);  
+   var htmls = new Array();  
+   htmls.push("<div class='sign_main' id='sign_layer'>");  
+   htmls.push("<div class='sign_succ_calendar_title'>");  
+  // htmls.push("<div class='calendar_month_next'>下月</div>");  
+   //htmls.push("<div class='calendar_month_prev'>上月</div>");  
+   htmls.push("<div class='calendar_month_span'></div>");  
+   htmls.push("</div>");  
+   htmls.push("<div class='sign' id='sign_cal'>");  
+   htmls.push("<table>");  
+   htmls.push("<tr>");  
+   htmls.push("<th>" + myMonth[0][0] + "</th>");  
+   htmls.push("<th>" + myMonth[0][1] + "</th>");  
+   htmls.push("<th>" + myMonth[0][2] + "</th>");  
+   htmls.push("<th>" + myMonth[0][3] + "</th>");  
+   htmls.push("<th>" + myMonth[0][4] + "</th>");  
+   htmls.push("<th>" + myMonth[0][5] + "</th>");  
+   htmls.push("<th>" + myMonth[0][6] + "</th>");  
+   htmls.push("</tr>");  
+   var d, w;  
+   for (w = 1; w < 6; w++) {  
+    htmls.push("<tr>");  
+    for (d = 0; d < 7; d++) {  
+     var ifHasSigned = calUtil.ifHasSigned(signList,myMonth[w][d]);  
+     console.log(ifHasSigned);  
+     if(ifHasSigned){  
+      htmls.push("<td class='on'>" + (!isNaN(myMonth[w][d]) ? myMonth[w][d] : " ") + "</td>");  
+     } else {  
+      htmls.push("<td>" + (!isNaN(myMonth[w][d]) ? myMonth[w][d] : " ") + "</td>");  
+     }  
+    }  
+    htmls.push("</tr>");  
+   }  
+   htmls.push("</table>");  
+   htmls.push("</div>");  
+   htmls.push("</div>");  
+   return htmls.join('');  
+  }  
+};  
