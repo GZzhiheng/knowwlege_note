@@ -1,0 +1,66 @@
+键盘的监听事件：
+
+1、浏览器
+	onkeydown onkeypress onkeyup
+
+2、兼容浏览器
+	function keyDown(){}
+	document.onkeydown = keyDown;
+
+无论浏览器按什么键都会触发事件
+
+FireFox和Opera兼容
+
+	 function keyDown(e)   e.which  String.fromCharCode(e.which)  
+
+	  function keyDown(e) {   
+　　   　　   var keycode = e.which;   
+　　 　　    var realkey = String.fromCharCode(e.which);   
+　　 　　    alert("按键码: " + keycode + " 字符: " + realkey);   
+　　    }
+　　   document.onkeydown = keyDown;
+
+
+IE的实现方法
+
+IE的程序不需要e变量，用window.event.keyCode来代替e.which，把键的索引值转化为真实键值方法类似：String.fromCharCode(event.keyCode)，程序如下:
+
+	function keyDown() {   
+　　 　　      var keycode = event.keyCode;   
+　　 　　      var realkey = String.fromCharCode(event.keyCode);   
+　　   　　     alert("按键码: " + keycode + " 字符: " + realkey);   
+　　     }   
+　　     document.onkeydown = keyDown;
+
+判断浏览器类型
+
+
+上 面了解了在各种浏览器里是如何实现获取按键事件对象的方法，那么下面需要判断浏览器类型，这个方法很多，有比较方便理解的，也有很巧妙的办法，先 说一般的方法：就是利用navigator对象的appName属性，当然也可以用userAgent属性，这里用appName来实现判断浏览器类 型，IE和Maxthon的appName是“Microsoft Internet Explorer” ,而FireFox和Opera的appName是“Netscape”，所以一个功能比较简单的代码如下：
+　　     function keyUp(e) {   
+　　     　　 if(navigator.appName == "Microsoft Internet Explorer")
+　　      　　 {
+　　      　　    　　var keycode = event.keyCode;   
+　　      　　    　　var realkey = String.fromCharCode(event.keyCode);   
+　　     　　    }else
+　　     　　   {
+　　     　　   　　    var keycode = e.which;   
+　　     　　 　 　   var realkey = String.fromCharCode(e.which);   
+　　    　　    }
+　　    　　   alert("按键码: " + keycode + " 字符: " + realkey); 
+　　   　} 
+　　      document.onkeyup = keyUp;
+比较简洁的方法是[2]：
+　　      function keyUp(e) { 
+　　       　 var currKey=0,e=e||event;
+　　      　   currKey=e.keyCode||e.which||e.charCode;
+　　      　　var keyName = String.fromCharCode(currKey);
+　　       　 alert("按键码: " + currKey + " 字符: " + keyName); 
+　　       }
+　　       document.onkeyup = keyUp;
+
+
+
+上面这种方法比较巧妙，简单地解释一下：
+首先，e=e||event;这句代码是为了进行浏览器事件对象获取的兼容。js中这句代码的意思是，如果在FireFox或Opera中，隐藏的变量e是存在的，那么e||event返回e，如果在IE中，隐藏变量e是不存在，则返回event。
+其次，currKey=e.keyCode||e.which||e.charCode;这句是为了兼容浏览器按键事件对象的按键码属性（详见第三部 分），如IE中，只有keyCode属性，而FireFox中有which和charCode属性，Opera中有keyCode和which属性等。
+上述代码只是兼容了浏览器，获取了keyup事件对象，简单的弹出了按键码和按键的字符，但是问题出现了，当你按键时，字符键都是大写的，而按shift键时，显示的字符很奇怪，所以就需要优化一下代码了。
