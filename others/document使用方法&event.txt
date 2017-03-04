@@ -51,3 +51,4 @@ IE下,event对象有srcElement属性,但是没有target属性;
 Firefox下,event对象有target属性,但是没有srcElement属性.但他们的作用是相当的，即：
 firefox 下的 event.target = IE 下的 event.srcElement
 解决方法:使用obj = event.srcElement ? event.srcElement : event.target;
+
