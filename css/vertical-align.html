@@ -23,16 +23,60 @@
 			display: table-cell;
 			vertical-align: middle;
 		}
+		.box3{
+			height:300px;
+			border:1px solid #ccc;
+		}
+		.box3 span{
+			display: inline-block;
+			width: 200px;
+			vertical-align: middle;
+		}
+		.box3 img{
+			vertical-align: middle;
+		}
+		.box4{
+		  height: 300px;
+		  text-align: center;
+		  background-color: #ccc;
+		}
+		.box4 img{
+		  vertical-align: middle;
+		}
+		.box4 i{
+		  display: inline-block;
+		  height: 100%;
+		  vertical-align: middle;
+		}
+		.box5{
+	      height: 300px;
+	      text-align: center;
+	      background-color: #bbb;
+	    }
+	    .box5 span{
+	      display: inline-block;
+	      vertical-align: middle;
+	    }
+	    .box5 s{
+	      display: inline-block;
+	      height: 100%;
+	      vertical-align: middle;
+	    }
 	</style>
 </head>
 <body>
 	<h1>一、</h1>
 	<h2>1、vertical-align只对inline、inline-block、table-cell有效.</h2>
-	<h2>2、vertical-align以line-height为高度居中</h2>
+	<h2>2、vertical-align以line-height的高度高度计算</h2>
+	<h2>3、vertical-align与父级元素的font-size有关</h3>
 	<h3>(float,position:absolute等会使元素变为block)</h3>
 
 	<div class="box1">
 		left<img src="../src/images/img.jpg">right
+	</div>
+	<div class="box3">
+		<span>文字<br/>文字<br/>文字</span>
+		<img src="../src/images/img.jpg">
 	</div>
 	<h3>如果把上述盒子line-height去掉，图片会上移</h3>
 	<br/>
@@ -44,6 +88,17 @@
 			<img src="../src/images/img.jpg">
 		</div>
 	</div>
+	<br/>
+
+	<h1>三、</h1>
+	<h2>兼容性好的使用居中例子</h2>
+	<div class="box4">
+	  <img src="../src/images/img.jpg"><i></i>
+	</div>
+	<div class="box5">
+	  <span>第一行第一行第一行第一行第一行第一行第一行第一行第一行第一行</span><s></s>
+	</div>
+
 
 </body>
 </html>
