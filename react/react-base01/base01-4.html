@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example04</title>
+    <style type="text/css">
+       #content{
+          background-color: #ccc;
+        }
+    </style>
+  </head>
+  <body>
+    <h2>使用props</h2>
+    <h3>props依赖于父级元素传来的数据,供子组件作为属性使用。此属性通常用于一开始渲染一遍，之后不需要更改的属性值。可以直接获取js或json的值作为属性值使用</h3>
+    <h3>props中的.map属性为循环渲染一数组里面的对象，要求每一个渲染里面有一个不同的key，不然后台会报错</h3>
+    <div id="content"></div>
+
+
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script src="../build/jquery.min.js"></script>
+  <script type="text/babel">
+      var data = [
+        {id:1,author:'Heng',text:"This is Heng"},
+        {id:2,author:"Wen",text:"This is Wen"}
+      ]
+
+      var CommentList = React.createClass({
+          render:function(){
+              var commentNodes = this.props.data.map(function(comment){
+                return (
+                  <Comment author={comment.author} key={comment.id}>
+                    {comment.text}
+                  </Comment>
+                )
+              })
+              return (
+                <div className="commentList">
+                  {commentNodes}
+                </div>
+              )
+          }
+      });
+
+      var Comment = React.createClass({
+          render: function(){
+              return(
+                <div className="comment">
+                  <h2 className="commentAuthor">
+                    {this.props.author}
+                  </h2>
+                  {this.props.children}
+                </div>
+              );
+          }
+      })
+
+      var CommentForm = React.createClass({
+          render: function(){
+              return (
+                <div className="commentForm">
+                  I am CommentForm.
+                </div>
+              )
+          }
+      });
+
+      var CommentBox = React.createClass({
+          render: function(){
+              return (
+                 <div className="commentBox">
+                   <h1>Comments</h1>
+                   <CommentList data={this.props.data}/>
+                   <CommentForm/>
+                 </div>
+              )
+          }
+      })
+
+      ReactDOM.render(
+        <CommentBox data={data}/>,
+        document.getElementById('content')
+      )
+  </script>
+  </body>
+</html>

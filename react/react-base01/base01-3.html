@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example03</title>
+    <style type="text/css">
+       #content{
+          background-color: #ccc;
+        }
+    </style>
+  </head>
+  <body>
+    <h2>React.createClass()创建一个React的新组件,React很多的操作都是基于组件之间的渲染完成的，这样可以更加方便的创建多样且复用的DOM组件，提高开发的效率,一下是基于一个简单的组件结构的demo</h2>
+    <h2 style="margin-left: 10px">-CommentBox</h2>
+    <h2 style="margin-left: 20px">-CommentList</h2>
+    <h2 style="margin-left: 40px">-Comment</h2>
+    <h2 style="margin-left: 20px">-CommentForm</h2>
+
+    <div id="content"></div>
+
+
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script src="../build/jquery.min.js"></script>
+  <script type="text/babel">
+      var CommentList = React.createClass({
+          render:function(){
+              return (
+                <div className="commentList">
+                  <Comment author="Pete Hunt">this is one Comment</Comment>
+                  <Comment author="Jordan">this is another Comment</Comment>
+                </div>
+              )
+          }
+      });
+
+      var Comment = React.createClass({
+          render: function(){
+              return(
+                <div className="comment">
+                  <h2 className="commentAuthor">
+                    {this.props.author}
+                  </h2>
+                  {this.props.children}
+                </div>
+              );
+          }
+      })
+
+      var CommentForm = React.createClass({
+          render: function(){
+              return (
+                <div className="commentForm">
+                  I am CommentForm.
+                </div>
+              )
+          }
+      });
+
+      var CommentBox = React.createClass({
+          render: function(){
+              return (
+                 <div className="commentBox">
+                   <h1>Comments</h1>
+                   <CommentList/>
+                   <CommentForm/>
+                 </div>
+              )
+          }
+      })
+
+      ReactDOM.render(
+        <CommentBox/>,
+        document.getElementById('content')
+      )
+  </script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example06</title>
+    <style type="text/css">
+       #content{
+          background-color: #ccc;
+        }
+    </style>
+  </head>
+  <body>
+    <h2>受控组件</h2>
+    <h3>对于传统的 DOM，input 元素被渲染并且浏览器管理它的状态（它的渲染值）。结果是，DOM的实际值会和组件不同。这是不理想的，因为视图的值会和组件的值不同。在React中，组件应该总是表示视图的值而不只是在初始化时。</h3>
+    <h3>因此，我们将使用 this.state 来在用户输入时保存输入。我们定义一个初始 state，它带有 author 和 text 两个属性并将他们设置为空字符串。在我们的 input 元素里，我们设置 value prop 来反映组件的 state 并给他们附加 onChange 事件处理。这些带有设置了 value 的 input 元素被称为受控组件。更多关于受控组件请阅读 <a href="http://reactjs.cn/react/docs/forms.html#controlled-components">Forms article。</a></h3>
+    <div id="content"></div>
+
+
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script src="../build/jquery.min.js"></script>
+  <script type="text/babel">
+      var data = [
+        {id:3,author:'author3',text:"This is Author3"},
+        {id:4,author:"author4",text:"This is Author4"}
+      ]
+
+      var CommentList = React.createClass({
+          render:function(){
+              var commentNodes = this.props.data.map(function(comment){
+                return (
+                  <Comment author={comment.author} key={comment.id}>
+                    {comment.text}
+                  </Comment>
+                )
+              })
+              return (
+                <div className="commentList">
+                  {commentNodes}
+                </div>
+              )
+          }
+      });
+
+      var Comment = React.createClass({
+          render: function(){
+              return(
+                <div className="comment">
+                  <h2 className="commentAuthor">
+                    {this.props.author}
+                  </h2>
+                  {this.props.children}
+                </div>
+              );
+          }
+      })
+
+      var CommentForm = React.createClass({
+          getInitialState: function(){
+            return {author:'',text:''};
+          },
+
+          handleAuthorChange: function(e){
+            this.setState({author:e.target.value});
+            console.log(e.target.value)
+          },
+
+          handleTextChange: function(e){
+            this.setState({text:e.target.value});
+            console.log(e.target.value)
+          },
+
+          handleSubmit: function(e){
+            e.preventDefault();
+            var author = this.state.author.trim();
+            var text = this.state.text.trim();
+            if (!text || !author ){
+              return;
+            }
+            this.setState({author:'',text:''});
+          },
+
+          render: function(){
+              return (
+                <form className="commentForm" onSubmit={this.handleSubmit}>
+                  <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
+                  <input type="text" placeholder="Say something" value={this.state.text} onChange={this.handleTextChange}/>
+                  <input type="submit" placeholder="Post"/>
+                </form>
+              )
+          }
+      });
+
+      var CommentBox = React.createClass({
+          loadnewData: function(){
+            $(".change-name").click(function(){
+              var add_id=data[data.length-1].id+1;
+              var add_author="author"+add_id;
+              var add_text="This is Author"+add_id;
+              data.push({id:add_id,author:add_author,text:add_text});
+              this.setState({data:data});
+            }.bind(this));
+          },
+
+          getInitialState: function(){
+            return {data:[{
+              id:1,author:'Heng',text:"This is Heng"},
+              {id:2,author:"Wen",text:"This is Wen"}
+            ]}
+          },
+
+          componentDidMount:function(){
+            this.loadnewData();
+          },
+
+          render: function(){
+              return (
+                 <div className="commentBox">
+                   <h1 className="change-name">Comments</h1>
+                   <CommentList data={this.state.data}/>
+                   <CommentForm/>
+                 </div>
+              )
+          }
+      });
+
+      ReactDOM.render(
+        <CommentBox data={data}/>,
+        document.getElementById('content')
+      )
+  </script>
+  </body>
+</html>

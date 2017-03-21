@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example07</title>
+    <style type="text/css">
+       #content{
+          background-color: #ccc;
+        }
+    </style>
+  </head>
+  <body>
+    <h2>回调函数作为属性</h2>
+    <h3>当用户提交评论时，我们需要刷新评论列表来包含这条新评论。在CommentBox中完成所有逻辑是有道理的，因为CommentBox 拥有代表了评论列表的状态(state)。</h3>
+    <h3>我们需要从子组件传回数据到它的父组件。我们在父组件的render方法中以传递一个新的回调函数（handleCommentSubmit）到子组件完成这件事，绑定它到子组件的 onCommentSubmit 事件上。无论事件什么时候触发，回调函数都将被调用：</h3>
+    <h4>这样就可以实现了子组件与父组建之间的交流</h4>
+    <div id="content"></div>
+
+
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script src="../build/jquery.min.js"></script>
+  <script type="text/babel">
+      var data = [
+        {id:3,author:'author3',text:"This is Author3"},
+        {id:4,author:"author4",text:"This is Author4"}
+      ]
+
+      var CommentList = React.createClass({
+          render:function(){
+              var commentNodes = this.props.data.map(function(comment){
+                return (
+                  <Comment author={comment.author} key={comment.id}>
+                    {comment.text}
+                  </Comment>
+                )
+              })
+              return (
+                <div className="commentList">
+                  {commentNodes}
+                </div>
+              )
+          }
+      });
+
+      var Comment = React.createClass({
+          render: function(){
+              return(
+                <div className="comment">
+                  <h2 className="commentAuthor">
+                    {this.props.author}
+                  </h2>
+                  {this.props.children}
+                </div>
+              );
+          }
+      })
+
+      var CommentForm = React.createClass({
+          getInitialState: function(){
+            return {author:'',text:''};
+          },
+
+          handleAuthorChange: function(e){
+            this.setState({author:e.target.value});
+          },
+
+          handleTextChange: function(e){
+            this.setState({text:e.target.value});
+          },
+
+          handleSubmit: function(e){
+            e.preventDefault();
+            var author = this.state.author.trim();
+            var text = this.state.text.trim();
+            if (!text || !author ){
+              return;
+            }
+            this.props.onCommentSubmit({author: author,text: text})
+            this.setState({author:'',text:''});
+          },
+
+          render: function(){
+              return (
+                <form className="commentForm" onSubmit={this.handleSubmit}>
+                  <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
+                  <input type="text" placeholder="Say something" value={this.state.text} onChange={this.handleTextChange}/>
+                  <input type="submit" placeholder="Post"/>
+                </form>
+              )
+          }
+      });
+
+      var CommentBox = React.createClass({
+          loadnewData: function(){
+            $(".change-name").click(function(){
+              var add_id=data[data.length-1].id+1;
+              var add_author="author"+add_id;
+              var add_text="This is Author"+add_id;
+              data.push({id:add_id,author:add_author,text:add_text});
+              this.setState({data:data});
+            }.bind(this));
+          },
+
+          handleCommentSubmit: function(comment){
+              var add_id=data[data.length-1].id+1;
+              var add_author=comment.author;
+              var add_text=comment.text;
+              data.push({id:add_id,author:add_author,text:add_text});
+              this.setState({data:data});
+          },
+
+          getInitialState: function(){
+            return {data:[{
+              id:1,author:'Heng',text:"This is Heng"},
+              {id:2,author:"Wen",text:"This is Wen"}
+            ]}
+          },
+
+          componentDidMount:function(){
+            this.loadnewData();
+          },
+
+          render: function(){
+              return (
+                 <div className="commentBox">
+                   <h1 className="change-name">Comments</h1>
+                   <CommentList data={this.state.data}/>
+                   <CommentForm onCommentSubmit={this.handleCommentSubmit}/>
+                 </div>
+              )
+          }
+      });
+
+      ReactDOM.render(
+        <CommentBox data={data}/>,
+        document.getElementById('content')
+      )
+  </script>
+  </body>
+</html>

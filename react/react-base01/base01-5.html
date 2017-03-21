@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example05</title>
+    <style type="text/css">
+       #content{
+          background-color: #ccc;
+        }
+    </style>
+  </head>
+  <body>
+    <h2>使用state</h2>
+    <h3>this.state是组件私有的，可以通过调用shit.setState()改变它。每当state更新，组件就重新渲染自己。</h3>
+    <h3>render() 方法被声明为一个带有 this.props 和 this.state 的函数。框架保证了 UI 总是与输入一致。</h3>
+    <h4>getInitialState()用于初始化组建的state数据</h4>
+    <h4>componentDidMount()数据发生改变，React自动调用方法进行重新渲染注意：是数据改变时自动进行渲染</h4>
+    <div id="content"></div>
+
+
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script src="../build/jquery.min.js"></script>
+  <script type="text/babel">
+      var data = [
+        {id:3,author:'author3',text:"This is Author3"},
+        {id:4,author:"author4",text:"This is Author4"}
+      ]
+
+      var CommentList = React.createClass({
+          render:function(){
+              var commentNodes = this.props.data.map(function(comment){
+                return (
+                  <Comment author={comment.author} key={comment.id}>
+                    {comment.text}
+                  </Comment>
+                )
+              })
+              return (
+                <div className="commentList">
+                  {commentNodes}
+                </div>
+              )
+          }
+      });
+
+      var Comment = React.createClass({
+          render: function(){
+              return(
+                <div className="comment">
+                  <h2 className="commentAuthor">
+                    {this.props.author}
+                  </h2>
+                  {this.props.children}
+                </div>
+              );
+          }
+      })
+
+      var CommentForm = React.createClass({
+          render: function(){
+              return (
+                <div className="commentForm">
+                  I am CommentForm.
+                </div>
+              )
+          }
+      });
+
+      var CommentBox = React.createClass({
+          loadnewData: function(){
+            $(".change-name").click(function(){
+              var add_id=data[data.length-1].id+1;
+              var add_author="author"+add_id;
+              var add_text="This is Author"+add_id;
+              data.push({id:add_id,author:add_author,text:add_text});
+              this.setState({data:data});
+            }.bind(this));
+          },
+
+          getInitialState: function(){
+            return {data:[{
+              id:1,author:'Heng',text:"This is Heng"},
+              {id:2,author:"Wen",text:"This is Wen"}
+            ]}
+          },
+
+          componentDidMount:function(){
+            this.loadnewData();
+          },
+
+          render: function(){
+              return (
+                 <div className="commentBox">
+                   <h1 className="change-name">Comments</h1>
+                   <CommentList data={this.state.data}/>
+                   <CommentForm/>
+                 </div>
+              )
+          }
+      });
+
+      ReactDOM.render(
+        <CommentBox data={data}/>,
+        document.getElementById('content')
+      )
+  </script>
+  </body>
+</html>

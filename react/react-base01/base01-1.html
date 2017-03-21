@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example01</title>
+    <style type="text/css">
+      #example{
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+  <h2>React加载3个核心js的代码库，分别为React的核心库react.js、对于dom操作的react-dom.js、编译.jsx文件的browser.min.js文件</h2>
+  <h2>render方法返回一个React组件树，最终会渲染成HTML,React操作的不是真实的DOM元素，它生成的React组件的实例化，即虚拟DOM</h2>
+  <div id="example"></div>
+
+
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+  <script src="../build/jquery.min.js"></script>
+  <script type="text/babel">
+      ReactDOM.render(
+        <h1>Hello, world!</h1>,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>
